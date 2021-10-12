@@ -1,8 +1,9 @@
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
-const scene = new THREE.Scene()
+const scene = new THREE.Scene
 
-scene.background = new THREE.Color(0x3412ff)
+scene.background = new THREE.Color(0xff06CF)
 
 const camera = new THREE.PerspectiveCamera(
     75,
@@ -11,24 +12,43 @@ const camera = new THREE.PerspectiveCamera(
     0.1,
     1000
 )
-camera.position.z = 2
+camera.position.z = 4
 
-const canvas1 = document.getElementById('cube') as HTMLCanvasElement
-const canvas2 = document.getElementById('clone') as HTMLCanvasElement
+const camera1 = new THREE.PerspectiveCamera(100, 200/200, 0.1, 500)
+camera1.position.z = 5
+
+const camera2 = new THREE.OrthographicCamera(-1, 1, 1, -1)
+camera2.position.z = 2
+
+const camera3 = new THREE.PerspectiveCamera(75, 1, 0.1, 1000)
+camera3.position.y = 2
+camera3.lookAt(new THREE.Vector3())
+
+const cubeCanvas = document.getElementById('cube') as HTMLCanvasElement
+const cloneCanvas = document.getElementById('clone') as HTMLCanvasElement
+const strangeCanvas = document.getElementById('strange') as HTMLCanvasElement
+const luckCanvas = document.getElementById('luck') as HTMLCanvasElement
 
 // const renderer = new THREE.WebGLRenderer()
-const renderer1 = new THREE.WebGLRenderer({canvas:canvas1})
+const renderer1 = new THREE.WebGLRenderer({canvas:cubeCanvas})
 renderer1.setSize(200, 200)
-const renderer2 = new THREE.WebGLRenderer({canvas:canvas2})
+const renderer2 = new THREE.WebGLRenderer({canvas:cloneCanvas})
 renderer2.setSize(200, 200)
+const renderer3 = new THREE.WebGLRenderer({canvas:strangeCanvas})
+renderer3.setSize(200, 200)
+const renderer4 = new THREE.WebGLRenderer({canvas:luckCanvas})
+renderer4.setSize(200, 200)
+
+new OrbitControls(camera, renderer1.domElement)
+new OrbitControls(camera1, renderer1.domElement)
 
 // To return to full screen
 // renderer.setSize(window.innerWidth, window.innerHeight)
 // document.body.appendChild(renderer.domElement)
 
-const geometry = new THREE.BoxGeometry()
+const geometry = new THREE.TorusKnotGeometry() // THREE.BoxGeometry()
 const material = new THREE.MeshBasicMaterial({
-    color: 0xFF0043,
+    color: 0x4AEDDF,
     wireframe: false,
 })
 
@@ -56,7 +76,9 @@ function animate() {
 
 function render() {
     renderer1.render(scene, camera)
-    renderer2.render(scene, camera)
+    renderer2.render(scene, camera1)
+    renderer3.render(scene, camera2)
+    renderer4.render(scene, camera)
 }
 
 animate()
